@@ -23,4 +23,4 @@ COPY --from=builder /app/package.json ./package.json
 
 USER bot
 
-CMD ["node", "dist/src/server.js"]
+CMD ["node", "dist/server.js"]
