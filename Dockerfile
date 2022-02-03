@@ -1,24 +1,26 @@
-FROM node:16 as dependencies
-WORKDIR /solananftbot
-COPY package.json yarn.lock .env ./
+FROM node:17-alpine as deps
+WORKDIR /app
+COPY package.json yarn.lock ./
 RUN yarn install --frozen-lockfile
 
-FROM node:16 as builder
-WORKDIR /solananftbot
+FROM node:17-alpine AS builder
+WORKDIR /app
 COPY . .
-COPY --from=dependencies /solananftbot/node_modules ./node_modules
-COPY --from=dependencies /solananftbot/.env ./.env
-RUN yarn build
+COPY --from=deps /app/node_modules ./node_modules
+RUN yarn compile
 
-FROM node:16 as runner
-WORKDIR /solananftbot
+FROM node:17-alpine AS runner
+WORKDIR /app
+
 ENV NODE_ENV production
-# If you are using a custom next.config.js file, uncomment this line.
-# COPY --from=builder /solananftbot/next.config.js ./
-COPY --from=builder /solananftbot/dist ./dist
-COPY --from=builder /solananftbot/node_modules ./node_modules
-COPY --from=builder /solananftbot/package.json ./package.json
-COPY --from=builder /solananftbot/.env ./.env
 
-EXPOSE 4000
-CMD ["yarn", "start"]
+RUN addgroup -g 1001 -S nodejs
+RUN adduser -S bot -u 1001
+
+COPY --from=builder --chown=bot:nodejs /app/dist ./dist
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/package.json ./package.json
+
+USER bot
+
+CMD ["node", "dist/src/server.js"]
