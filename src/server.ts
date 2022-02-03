@@ -1,7 +1,7 @@
 import { initClient as initDiscordClient } from "./lib/discord";
 import initWorkers from "./workers/initWorkers";
 import { newConnection } from "./lib/solana/connection";
-import dotenv from "dotenv";
+import "dotenv/config";
 import { loadConfig } from "./config";
 import { Worker } from "./workers/types";
 import notifyNFTSalesWorker from "./workers/notifyNFTSalesWorker";
@@ -9,10 +9,6 @@ import initTwitterClient from "./lib/twitter";
 
 const main = async () => {
   try {
-    const result = dotenv.config();
-    if (result.error) {
-      throw result.error;
-    }
     const config = loadConfig();
 
     const web3Conn = newConnection();
