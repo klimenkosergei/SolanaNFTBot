@@ -1,5 +1,5 @@
 import { Connection, ParsedConfirmedTransaction } from "@solana/web3.js";
-import NFTData from "lib/solana/NFTData";
+import NFTData from "../solana/NFTData";
 
 export enum SaleMethod {
   Direct = "direct",

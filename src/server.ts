@@ -1,11 +1,11 @@
-import { initClient as initDiscordClient } from "lib/discord";
-import initWorkers from "workers/initWorkers";
-import { newConnection } from "lib/solana/connection";
+import { initClient as initDiscordClient } from "./lib/discord";
+import initWorkers from "./workers/initWorkers";
+import { newConnection } from "./lib/solana/connection";
 import dotenv from "dotenv";
-import { loadConfig } from "config";
-import { Worker } from "workers/types";
-import notifyNFTSalesWorker from "workers/notifyNFTSalesWorker";
-import initTwitterClient from "lib/twitter";
+import { loadConfig } from "./config";
+import { Worker } from "./workers/types";
+import notifyNFTSalesWorker from "./workers/notifyNFTSalesWorker";
+import initTwitterClient from "./lib/twitter";
 
 const main = async () => {
   try {

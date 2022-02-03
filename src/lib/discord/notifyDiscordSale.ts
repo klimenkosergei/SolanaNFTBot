@@ -3,8 +3,8 @@ import Discord, {
   MessageEmbed,
   TextChannel,
 } from "discord.js";
-import { NFTSale, SaleMethod } from "lib/marketplaces";
-import truncateForAddress from "lib/truncateForAddress";
+import { NFTSale, SaleMethod } from "../marketplaces";
+import truncateForAddress from "../truncateForAddress";
 
 const status: {
   totalNotified: number;
