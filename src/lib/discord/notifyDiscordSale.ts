@@ -98,7 +98,7 @@ export default async function notifyDiscordSale(
   });
 
   await channel.send({
-    components: [actionRowMsg],
+    // components: [actionRowMsg],
     embeds: [embedMsg],
   });
   const logMsg = `Notified discord #${channel.name}: ${nftData.name} - ${description}`;

@@ -7,12 +7,14 @@ export default async function notifyTwitter(
   twitterClient: TwitterAPI,
   nftSale: NFTSale
 ) {
-  const nftName = nftSale.nftData?.name;
-  const text = `${nftName} has just been sold ${
-    nftSale.method === SaleMethod.Bid ? "via bidding " : ""
-  }for ${nftSale.getPriceInSOL()} S◎L at ${
-    nftSale.marketplace.name
-  }! #SolanaNFTs #NFTSale`;
+  const { marketplace, nftData } = nftSale;
+
+  const nftName = nftData?.name;
+  const text = `Welcome to the Echelon, operative. Stay vigilant.\n${nftName}\n\nPecked for ${nftSale.getPriceInSOL()} S◎L${
+    nftSale.method === SaleMethod.Bid ? " via bidding" : ""
+  } at ${marketplace.name}! #DroniesNFT #SolanaNFTs \n\n${marketplace.itemURL(
+    nftSale.token
+  )}`;
   const mediaArr: string[] = [];
   if (Boolean(nftSale.nftData?.image)) {
     const data = await getImageDataFromUrl(nftSale.nftData?.image as string);
