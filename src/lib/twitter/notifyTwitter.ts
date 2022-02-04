@@ -12,7 +12,7 @@ export default async function notifyTwitter(
   const nftName = nftData?.name;
   const text = `Welcome to the Echelon, operative. Stay vigilant.\n${nftName}\n\nPecked for ${nftSale.getPriceInSOL()} S◎L${
     nftSale.method === SaleMethod.Bid ? " via bidding" : ""
-  } at ${marketplace.name}! #DroniesNFT #SolanaNFTs \n\n${marketplace.itemURL(
+  } on ${marketplace.name}! #DroniesNFT #SolanaNFTs \n\n${marketplace.itemURL(
     nftSale.token
   )}`;
   const mediaArr: string[] = [];
