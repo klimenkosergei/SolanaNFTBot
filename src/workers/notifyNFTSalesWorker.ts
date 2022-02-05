@@ -9,6 +9,15 @@ import { fetchNFTData } from "../lib/solana/NFTData";
 import notifyDiscordSale from "../lib/discord/notifyDiscordSale";
 import { fetchDiscordChannel } from "../lib/discord";
 import notifyTwitter from "../lib/twitter/notifyTwitter";
+import axios from "axios";
+
+interface CoinGecko {
+  market_data: {
+    current_price: {
+      usd: number;
+    };
+  };
+}
 
 const twitterNotifQueue = queue({
   concurrency: 1,
@@ -64,6 +73,7 @@ export default function newWorker(
           }
 
           const nftSale = await parseNFTSale(web3Conn, tx);
+
           if (!nftSale) {
             return;
           }
@@ -71,9 +81,20 @@ export default function newWorker(
           if (nftSale.buyer === project.mintAddress) {
             return;
           }
+
+          const { data } = await axios.get<CoinGecko>(
+            "https://api.coingecko.com/api/v3/coins/solana"
+          );
+          const solPrice = data.market_data.current_price.usd;
+
           if (channel) {
             try {
-              await notifyDiscordSale(discordClient, channel, nftSale);
+              await notifyDiscordSale(
+                discordClient,
+                channel,
+                nftSale,
+                solPrice
+              );
             } catch (err) {
               catchError(err, "Discord");
             }
@@ -81,7 +102,7 @@ export default function newWorker(
           if (twitterClient) {
             const cb = () => {
               try {
-                return notifyTwitter(twitterClient, nftSale);
+                return notifyTwitter(twitterClient, nftSale, solPrice);
               } catch (err) {
                 catchError(err, "Twitter");
               }

@@ -5,16 +5,23 @@ import axios from "axios";
 
 export default async function notifyTwitter(
   twitterClient: TwitterAPI,
-  nftSale: NFTSale
+  nftSale: NFTSale,
+  solUsdPrice: number
 ) {
   const { marketplace, nftData } = nftSale;
 
+  const numberFormatter = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+  });
+  const price = solUsdPrice * nftSale.getPriceInSOL();
+
   const nftName = nftData?.name;
-  const text = `Welcome to the Echelon, operative. Stay vigilant.\n${nftName}\n\nPecked for ${nftSale.getPriceInSOL()} S◎L${
-    nftSale.method === SaleMethod.Bid ? " via bidding" : ""
-  } on ${marketplace.name}! #DroniesNFT #SolanaNFTs \n\n${marketplace.itemURL(
-    nftSale.token
-  )}`;
+  const text = `Welcome to the Echelon, operative. Stay vigilant.\n${nftName}\n\nPecked for ${nftSale.getPriceInSOL()} S◎L (${numberFormatter.format(
+    price
+  )} USD) on ${
+    marketplace.name
+  }! #DroniesNFT #SolanaNFTs \n\n${marketplace.itemURL(nftSale.token)}`;
   const mediaArr: string[] = [];
   if (Boolean(nftSale.nftData?.image)) {
     const data = await getImageDataFromUrl(nftSale.nftData?.image as string);

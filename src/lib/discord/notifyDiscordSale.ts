@@ -21,12 +21,19 @@ export default async function notifyDiscordSale(
   client: Discord.Client,
   channel: TextChannel,
   nftSale: NFTSale,
+  solUsdPrice: number,
   test?: boolean
 ) {
   if (!client.isReady()) {
     return;
   }
   const { marketplace, nftData } = nftSale;
+
+  const numberFormatter = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+  });
+  const price = solUsdPrice * nftSale.getPriceInSOL();
 
   if (!nftData) {
     console.log("missing nft Data for token: ", nftSale.token);
@@ -69,9 +76,9 @@ export default async function notifyDiscordSale(
     fields: [
       {
         name: "Sold for",
-        value: `${nftSale.getPriceInSOL()} S◎L ${
-          nftSale.method === SaleMethod.Bid ? "(Via bidding)" : ""
-        }`,
+        value: `${nftSale.getPriceInSOL()} S◎L (${numberFormatter.format(
+          price
+        )} USD) ${nftSale.method === SaleMethod.Bid ? "(via bidding)" : ""}`,
         inline: false,
       },
       {
