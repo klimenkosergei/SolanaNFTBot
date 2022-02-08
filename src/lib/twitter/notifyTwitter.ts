@@ -19,9 +19,7 @@ export default async function notifyTwitter(
   const nftName = nftData?.name;
   const text = `Welcome to the Echelon, operative. Stay vigilant.\n${nftName}\n\nPecked for ${nftSale.getPriceInSOL()} S◎L (${numberFormatter.format(
     price
-  )} USD) on ${
-    marketplace.name
-  }! #DroniesNFT #SolanaNFTs \n\n${marketplace.itemURL(nftSale.token)}`;
+  )} USD) on ${marketplace.name}! \n\n${marketplace.itemURL(nftSale.token)}`;
   const mediaArr: string[] = [];
   if (Boolean(nftSale.nftData?.image)) {
     const data = await getImageDataFromUrl(nftSale.nftData?.image as string);
